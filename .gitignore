@@ -1,0 +1,9 @@
+# Config (may contain sensitive server data)
+config.yml
+
+# macOS
+.DS_Store
+
+# Compiled binaries
+lzb
+dist/
