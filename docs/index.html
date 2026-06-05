@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>lazy-bastion (lzb) — WorldBinary Prod Access</title>
+  <title>lazy-bastion (lzb) — Prod Access</title>
   <style>
     :root {
       --bg:        #0d1117;
@@ -207,12 +207,13 @@
 
 <header>
   <div class="logo"><span>lazy</span>-bastion &nbsp;<span style="color:var(--muted);font-size:1.4rem">·</span>&nbsp; <span style="font-size:1.8rem;color:var(--blue)">lzb</span></div>
-  <p class="tagline">TUI para túneles AWS SSM y conexiones SSH a producción · WorldBinary</p>
+  <p class="tagline">TUI para túneles AWS SSM y conexiones SSH a producción</p>
   <div class="badges">
     <span class="badge green">Go 1.22+</span>
     <span class="badge blue">macOS · Linux · Windows</span>
     <span class="badge">AWS SSM</span>
     <span class="badge">bubbletea</span>
+    <span class="badge" id="dl-badge" style="display:none">⬇ <span id="dl-count">0</span> descargas</span>
   </div>
 </header>
 
@@ -231,13 +232,13 @@
     <!-- macOS -->
     <div class="tab-panel active" id="tab-mac">
       <p>Pega esto en tu terminal (detecta automáticamente Intel o Apple Silicon):</p>
-      <pre><code>curl -fsSL https://OWNER.github.io/lazy-bastion/install.sh | bash</code><button class="copy-btn" onclick="copy(this)">Copiar</button></pre>
+      <pre><code>curl -fsSL https://mbaez-ctech.github.io/lazy-bastion/install.sh | bash</code><button class="copy-btn" onclick="copy(this)">Copiar</button></pre>
 
       <p>O para instalar una versión específica:</p>
-      <pre><code>LZB_VERSION=1.2.0 curl -fsSL https://OWNER.github.io/lazy-bastion/install.sh | bash</code><button class="copy-btn" onclick="copy(this)">Copiar</button></pre>
+      <pre><code>LZB_VERSION=1.2.0 curl -fsSL https://mbaez-ctech.github.io/lazy-bastion/install.sh | bash</code><button class="copy-btn" onclick="copy(this)">Copiar</button></pre>
 
       <p>Por defecto el binario queda en <code>/usr/local/bin/lzb</code>. Puedes cambiarlo:</p>
-      <pre><code>LZB_INSTALL_DIR=~/bin curl -fsSL https://OWNER.github.io/lazy-bastion/install.sh | bash</code><button class="copy-btn" onclick="copy(this)">Copiar</button></pre>
+      <pre><code>LZB_INSTALL_DIR=~/bin curl -fsSL https://mbaez-ctech.github.io/lazy-bastion/install.sh | bash</code><button class="copy-btn" onclick="copy(this)">Copiar</button></pre>
 
       <h3>Prerequisitos macOS</h3>
       <table>
@@ -252,7 +253,7 @@
     <!-- Windows -->
     <div class="tab-panel" id="tab-win">
       <p>Abre <strong>PowerShell</strong> como usuario normal (no administrador) y ejecuta:</p>
-      <pre><code>iwr https://OWNER.github.io/lazy-bastion/install.ps1 | iex</code><button class="copy-btn" onclick="copy(this)">Copiar</button></pre>
+      <pre><code>iwr https://mbaez-ctech.github.io/lazy-bastion/install.ps1 | iex</code><button class="copy-btn" onclick="copy(this)">Copiar</button></pre>
 
       <p>El binario se instala en <code>%LOCALAPPDATA%\Programs\lzb\lzb.exe</code> y se agrega al PATH del usuario automáticamente.</p>
 
@@ -263,7 +264,7 @@
       </div>
 
       <p>Para una versión específica:</p>
-      <pre><code>$env:LZB_VERSION="1.2.0"; iwr https://OWNER.github.io/lazy-bastion/install.ps1 | iex</code><button class="copy-btn" onclick="copy(this)">Copiar</button></pre>
+      <pre><code>$env:LZB_VERSION="1.2.0"; iwr https://mbaez-ctech.github.io/lazy-bastion/install.ps1 | iex</code><button class="copy-btn" onclick="copy(this)">Copiar</button></pre>
 
       <h3>Prerequisitos Windows</h3>
       <table>
@@ -277,7 +278,7 @@
 
     <!-- Manual -->
     <div class="tab-panel" id="tab-manual">
-      <p>Descarga el binario directamente desde <a href="https://github.com/OWNER/lazy-bastion/releases">GitHub Releases</a>:</p>
+      <p>Descarga el binario directamente desde <a href="https://github.com/mbaez-ctech/lazy-bastion/releases">GitHub Releases</a>:</p>
 
       <table style="margin-bottom:16px">
         <tr><th>Plataforma</th><th>Archivo</th></tr>
@@ -383,14 +384,28 @@ sudo mv lzb-darwin-arm64 /usr/local/bin/lzb</code><button class="copy-btn" oncli
 </main>
 
 <footer>
-  <p>lazy-bastion · WorldBinary ·
-    <a href="https://github.com/OWNER/lazy-bastion">GitHub</a> ·
-    <a href="https://github.com/OWNER/lazy-bastion/releases">Releases</a> ·
-    <a href="https://github.com/OWNER/lazy-bastion/issues">Issues</a>
+  <p>lazy-bastion ·
+    <a href="https://github.com/mbaez-ctech/lazy-bastion">GitHub</a> ·
+    <a href="https://github.com/mbaez-ctech/lazy-bastion/releases">Releases</a> ·
+    <a href="https://github.com/mbaez-ctech/lazy-bastion/issues">Issues</a>
   </p>
 </footer>
 
 <script>
+  (async () => {
+    try {
+      const res = await fetch('https://api.github.com/repos/mbaez-ctech/lazy-bastion/releases');
+      if (!res.ok) return;
+      const releases = await res.json();
+      const total = releases.reduce((sum, r) =>
+        sum + r.assets.reduce((s, a) => s + a.download_count, 0), 0);
+      if (total > 0) {
+        document.getElementById('dl-count').textContent = total.toLocaleString();
+        document.getElementById('dl-badge').style.display = '';
+      }
+    } catch (_) {}
+  })();
+
   function switchTab(e, id) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));

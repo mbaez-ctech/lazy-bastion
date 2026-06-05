@@ -6,10 +6,8 @@ import (
 	"net"
 	"os"
 	"os/exec"
-	"strconv"
-	"strings"
+	"path/filepath"
 	"sync"
-	"syscall"
 	"time"
 
 	"lazy-bastion/internal/config"
@@ -180,8 +178,8 @@ func (m *Manager) startProc(p *Process) {
 		"--profile", m.profile,
 		"--region", m.region,
 	)
-	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
-	logPath := fmt.Sprintf("/tmp/lzb-%d.log", p.Config.LocalPort)
+	setProcGroup(cmd)
+	logPath := filepath.Join(os.TempDir(), fmt.Sprintf("lzb-%d.log", p.Config.LocalPort))
 	if f, err := os.Create(logPath); err == nil {
 		cmd.Stdout = f
 		cmd.Stderr = f
@@ -271,7 +269,7 @@ func (m *Manager) stopProc(p *Process) {
 	// also killed. Cancelling the context afterwards lets the watcher goroutine
 	// exit cleanly; the exec.CommandContext auto-kill becomes a harmless no-op.
 	if p.cmd != nil && p.cmd.Process != nil {
-		_ = syscall.Kill(-p.cmd.Process.Pid, syscall.SIGKILL)
+		killProcGroup(p.cmd.Process.Pid)
 	}
 	if p.cancel != nil {
 		p.cancel()
@@ -294,19 +292,4 @@ func isPortOpen(port int) bool {
 	}
 	c.Close()
 	return true
-}
-
-// killOrphansOnPort kills any process listening on port that we no longer
-// track — covers session-manager-plugin processes that outlived their parent.
-func killOrphansOnPort(port int) {
-	out, err := exec.Command("lsof", "-ti", "-sTCP:LISTEN",
-		fmt.Sprintf("tcp:%d", port)).Output()
-	if err != nil {
-		return
-	}
-	for _, line := range strings.Split(strings.TrimSpace(string(out)), "\n") {
-		if pid, err := strconv.Atoi(strings.TrimSpace(line)); err == nil && pid > 1 {
-			_ = syscall.Kill(pid, syscall.SIGKILL)
-		}
-	}
 }

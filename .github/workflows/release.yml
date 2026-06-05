@@ -1,0 +1,44 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Get version
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+
+      - name: Build binaries
+        run: |
+          mkdir -p dist
+          GOOS=darwin  GOARCH=arm64 go build -ldflags="-s -w" -o dist/lzb-darwin-arm64        .
+          GOOS=darwin  GOARCH=amd64 go build -ldflags="-s -w" -o dist/lzb-darwin-amd64        .
+          GOOS=linux   GOARCH=amd64 go build -ldflags="-s -w" -o dist/lzb-linux-amd64         .
+          GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o dist/lzb-windows-amd64.exe   .
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: v${{ steps.version.outputs.VERSION }}
+          generate_release_notes: true
+          files: |
+            dist/lzb-darwin-arm64
+            dist/lzb-darwin-amd64
+            dist/lzb-linux-amd64
+            dist/lzb-windows-amd64.exe

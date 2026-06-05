@@ -7,8 +7,8 @@ import (
 	"net"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
-	"syscall"
 	"time"
 
 	"lazy-bastion/internal/config"
@@ -18,13 +18,6 @@ import (
 // ensuring the session-manager-plugin child is also terminated.
 type SSMProcess struct {
 	proc *os.Process
-}
-
-func (p *SSMProcess) Kill() error {
-	if p.proc == nil {
-		return nil
-	}
-	return syscall.Kill(-p.proc.Pid, syscall.SIGKILL)
 }
 
 // EnsureKey creates an Ed25519 SSH key at keyPath if it doesn't already exist.
@@ -135,8 +128,8 @@ func StartSSHTunnel(ctx context.Context, profile, region string, srv config.Serv
 		"--profile", profile,
 		"--region", region,
 	)
-	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
-	logPath := fmt.Sprintf("/tmp/lzb-ssh-%s.log", srv.Name)
+	setProcGroup(cmd)
+	logPath := filepath.Join(os.TempDir(), fmt.Sprintf("lzb-ssh-%s.log", srv.Name))
 	if f, err := os.Create(logPath); err == nil {
 		cmd.Stdout = f
 		cmd.Stderr = f
@@ -166,7 +159,7 @@ func BuildSSHCmd(srv config.Server, keyPath string) *exec.Cmd {
 	return exec.Command("ssh",
 		"-i", keyPath,
 		"-o", "StrictHostKeyChecking=accept-new",
-		"-o", "UserKnownHostsFile=/dev/null",
+		"-o", "UserKnownHostsFile="+os.DevNull,
 		"-p", fmt.Sprintf("%d", srv.TunnelPort),
 		fmt.Sprintf("%s@127.0.0.1", srv.SSHUser),
 	)

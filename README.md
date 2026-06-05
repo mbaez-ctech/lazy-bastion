@@ -1,6 +1,6 @@
 # lazy-bastion (`lzb`)
 
-TUI en Go para gestionar túneles AWS SSM y conexiones SSH a servidores de producción de WorldBinary.
+TUI en Go para gestionar túneles AWS SSM y conexiones SSH a servidores de producción.
 
 ## Requisitos
 
@@ -133,6 +133,43 @@ Enter (servidor)
 
 Cada túnel escribe su salida en `/tmp/lzb-<puerto>.log`.  
 Los túneles SSH escriben en `/tmp/lzb-ssh-<nombre>.log`.
+
+## Publicar un release
+
+Los releases se publican en GitHub Releases y los binarios se generan automáticamente mediante el workflow `.github/workflows/release.yml`.
+
+### Pasos
+
+```bash
+# 1. Asegúrate de estar en main y al día
+git checkout main
+git pull
+
+# 2. Crea el tag con versionado semántico
+git tag v1.2.3
+
+# 3. Pushea el tag — esto dispara el workflow de release
+git push origin v1.2.3
+```
+
+El workflow compila binarios para `darwin/arm64`, `darwin/amd64`, `linux/amd64` y `windows/amd64`, y los sube automáticamente al release en GitHub.
+
+### Convención de versiones
+
+| Cambio | Ejemplo | Cuándo usarlo |
+|---|---|---|
+| Patch | `v0.1.0` → `v0.1.1` | Bug fix sin cambios de API |
+| Minor | `v0.1.0` → `v0.2.0` | Feature nueva compatible |
+| Major | `v0.1.0` → `v1.0.0` | Cambio incompatible de API o config |
+
+### Borrar un tag (si te equivocas antes de pushear)
+
+```bash
+git tag -d v1.2.3          # borra local
+git push origin :v1.2.3    # borra remoto (si ya fue pusheado)
+```
+
+---
 
 ## Dependencias principales
 

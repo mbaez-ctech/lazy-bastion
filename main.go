@@ -4,9 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"os/signal"
 	"path/filepath"
-	"syscall"
 
 	tea "github.com/charmbracelet/bubbletea"
 
@@ -56,15 +54,7 @@ func main() {
 
 	p := tea.NewProgram(app, tea.WithAltScreen())
 
-	// Ensure tunnels are killed when the terminal closes or the process is
-	// terminated externally (SIGHUP = terminal closed, SIGTERM = kill/systemd).
-	sigCh := make(chan os.Signal, 1)
-	signal.Notify(sigCh, os.Interrupt, syscall.SIGTERM, syscall.SIGHUP)
-	go func() {
-		<-sigCh
-		mgr.StopAll()
-		p.Kill()
-	}()
+	watchSignals(mgr, p)
 
 	if _, err := p.Run(); err != nil {
 		fatalf("Error en TUI: %v\n", err)
