@@ -6,104 +6,255 @@
   <title>lazy-bastion (lzb) — Prod Access</title>
   <style>
     :root {
-      --bg:        #0d1117;
-      --surface:   #161b22;
-      --border:    #30363d;
-      --text:      #c9d1d9;
-      --muted:     #8b949e;
-      --green:     #3fb950;
-      --blue:      #58a6ff;
-      --yellow:    #d29922;
-      --red:       #f85149;
-      --purple:    #bc8cff;
-      --code-bg:   #1f2428;
-      --tab-active:#58a6ff;
+      --bg:        #0a0e14;
+      --surface:   #131920;
+      --surface2:  #1a2030;
+      --border:    #252d3a;
+      --border2:   #2e3a4e;
+      --text:      #cdd6e0;
+      --muted:     #6b7a8d;
+      --green:     #3dd68c;
+      --blue:      #5ba4f5;
+      --yellow:    #e3a946;
+      --red:       #f27e7e;
+      --purple:    #c4a0ff;
+      --cyan:      #56d4e8;
+      --code-bg:   #0e1520;
+      --glow-green: rgba(61,214,140,0.15);
+      --glow-blue:  rgba(91,164,245,0.15);
+      --nav-h: 56px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
 
     body {
       background: var(--bg);
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
       font-size: 15px;
-      line-height: 1.6;
+      line-height: 1.7;
     }
 
     a { color: var(--blue); text-decoration: none; }
     a:hover { text-decoration: underline; }
 
-    /* ── layout ── */
-    header {
+    /* ── navbar ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,14,20,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
-      padding: 48px 24px 40px;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+    }
+    .nav-brand {
+      font-family: "SF Mono", "Fira Code", monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+    .nav-brand span { color: var(--green); }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-links a {
+      color: var(--muted);
+      font-size: 0.85rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: color 0.15s, background 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); background: var(--surface2); text-decoration: none; }
+
+    /* ── hero ── */
+    header {
+      position: relative;
+      overflow: hidden;
+      padding: 80px 24px 72px;
       text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 0%, rgba(91,164,245,0.09) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 20% 100%, rgba(61,214,140,0.07) 0%, transparent 60%);
+      pointer-events: none;
     }
 
     .logo {
       font-family: "SF Mono", "Fira Code", monospace;
-      font-size: 2.4rem;
-      font-weight: 700;
+      font-size: 2.8rem;
+      font-weight: 800;
       color: #fff;
-      letter-spacing: -1px;
+      letter-spacing: -1.5px;
+      position: relative;
     }
-    .logo span { color: var(--green); }
+    .logo .accent { color: var(--green); }
+    .logo .lzb {
+      font-size: 2rem;
+      color: var(--blue);
+      display: inline-block;
+      padding: 0 12px;
+    }
+    .logo .sep { color: var(--border2); }
 
     .tagline {
-      margin-top: 8px;
+      margin-top: 12px;
       color: var(--muted);
-      font-size: 1rem;
+      font-size: 1.05rem;
     }
 
-    .badges { margin-top: 20px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .hero-cmd {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 28px;
+      background: var(--code-bg);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-family: "SF Mono", "Fira Code", monospace;
+      font-size: 0.9rem;
+      color: var(--green);
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+    .hero-cmd:hover {
+      border-color: var(--green);
+      box-shadow: 0 0 18px var(--glow-green);
+    }
+    .hero-cmd .prompt { color: var(--muted); user-select: none; }
+    .hero-cmd .copy-icon {
+      color: var(--muted);
+      font-size: 0.8rem;
+      border: 1px solid var(--border2);
+      border-radius: 4px;
+      padding: 2px 8px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .hero-cmd:hover .copy-icon { color: var(--green); border-color: var(--green); }
+
+    .badges { margin-top: 24px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
     .badge {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 4px 12px;
+      padding: 4px 14px;
       font-size: 0.78rem;
       font-family: "SF Mono", monospace;
       color: var(--muted);
+      transition: border-color 0.15s;
     }
-    .badge.green { border-color: var(--green); color: var(--green); }
-    .badge.blue  { border-color: var(--blue);  color: var(--blue);  }
+    .badge.green { border-color: rgba(61,214,140,0.4); color: var(--green); }
+    .badge.blue  { border-color: rgba(91,164,245,0.4); color: var(--blue);  }
 
-    main { max-width: 820px; margin: 0 auto; padding: 48px 24px 80px; }
+    /* ── layout ── */
+    main { max-width: 860px; margin: 0 auto; padding: 56px 24px 96px; }
 
-    section { margin-bottom: 56px; }
+    section {
+      margin-bottom: 64px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 32px;
+      transition: border-color 0.2s;
+    }
+    section:hover { border-color: var(--border2); }
 
     h2 {
-      font-size: 1.25rem;
-      font-weight: 600;
+      font-size: 1.2rem;
+      font-weight: 700;
       color: #fff;
       border-bottom: 1px solid var(--border);
-      padding-bottom: 8px;
-      margin-bottom: 20px;
+      padding-bottom: 12px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    h2 .section-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+    h2 .section-icon.green { background: rgba(61,214,140,0.12); color: var(--green); }
+    h2 .section-icon.blue  { background: rgba(91,164,245,0.12); color: var(--blue);  }
+    h2 .section-icon.yellow{ background: rgba(227,169,70,0.12); color: var(--yellow);}
+    h2 .section-icon.cyan  { background: rgba(86,212,232,0.12); color: var(--cyan);  }
+
+    h3 {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 24px 0 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
     }
 
-    h3 { font-size: 1rem; font-weight: 600; color: var(--text); margin: 20px 0 8px; }
+    p { color: var(--text); margin-bottom: 14px; }
 
-    p { color: var(--text); margin-bottom: 12px; }
+    ol, ul { padding-left: 22px; }
+    ol li, ul li { color: var(--muted); font-size: 0.9rem; line-height: 2.1; }
+    ol li code, ul li code { font-size: 0.82em; }
 
     /* ── code blocks ── */
+    .code-wrap {
+      position: relative;
+      margin: 14px 0;
+    }
+    .code-header {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
+      padding: 7px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot.r { background: #ff5f57; }
+    .dot.y { background: #febc2e; }
+    .dot.g { background: #28c840; }
+
     pre {
       background: var(--code-bg);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 16px 20px;
+      padding: 18px 20px;
       overflow-x: auto;
       font-size: 0.85rem;
       font-family: "SF Mono", "Fira Code", "Cascadia Code", monospace;
-      position: relative;
+      line-height: 1.7;
+    }
+    .code-wrap pre {
+      border-radius: 0 0 8px 8px;
     }
 
     code {
       font-family: "SF Mono", "Fira Code", monospace;
-      font-size: 0.85em;
+      font-size: 0.84em;
       background: var(--code-bg);
-      border: 1px solid var(--border);
+      border: 1px solid var(--border2);
       border-radius: 4px;
-      padding: 1px 6px;
+      padding: 1px 7px;
       color: var(--purple);
     }
 
@@ -119,95 +270,201 @@
       position: absolute;
       top: 10px;
       right: 10px;
-      background: var(--surface);
+      background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: 6px;
       color: var(--muted);
       cursor: pointer;
       font-size: 0.72rem;
-      padding: 3px 10px;
+      padding: 4px 10px;
       font-family: inherit;
-      transition: color 0.15s, border-color 0.15s;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+      z-index: 2;
     }
-    .copy-btn:hover { color: var(--text); border-color: var(--text); }
-    .copy-btn.copied { color: var(--green); border-color: var(--green); }
+    .copy-btn:hover { color: var(--text); border-color: var(--blue); background: var(--surface); }
+    .copy-btn.copied { color: var(--green); border-color: var(--green); background: rgba(61,214,140,0.08); }
 
     /* ── tabs ── */
-    .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+    .tabs {
+      display: flex;
+      gap: 2px;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 24px;
+      width: fit-content;
+    }
     .tab-btn {
       background: none;
       border: none;
-      border-bottom: 2px solid transparent;
+      border-radius: 7px;
       color: var(--muted);
       cursor: pointer;
       font-family: inherit;
-      font-size: 0.9rem;
-      margin-bottom: -1px;
-      padding: 10px 18px;
-      transition: color 0.15s, border-color 0.15s;
+      font-size: 0.85rem;
+      padding: 7px 18px;
+      transition: color 0.15s, background 0.15s;
     }
-    .tab-btn:hover { color: var(--text); }
-    .tab-btn.active { border-bottom-color: var(--tab-active); color: var(--blue); font-weight: 600; }
+    .tab-btn:hover { color: var(--text); background: var(--surface2); }
+    .tab-btn.active {
+      background: var(--surface);
+      color: var(--blue);
+      font-weight: 600;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
 
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
-    /* ── prereqs table ── */
-    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-    th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--border); }
-    th { color: var(--muted); font-weight: 500; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
-    td:first-child { font-family: "SF Mono", monospace; color: var(--blue); }
-    td:last-child { color: var(--muted); font-size: 0.85rem; }
+    /* ── table ── */
+    .table-wrap {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 16px 0;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th, td { text-align: left; padding: 11px 16px; border-bottom: 1px solid var(--border); }
+    tr:last-child td { border-bottom: none; }
+    th {
+      background: var(--surface2);
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    tbody tr { transition: background 0.1s; }
+    tbody tr:hover { background: var(--surface2); }
+    td:first-child { font-family: "SF Mono", monospace; color: var(--blue); font-size: 0.82rem; }
+    td:last-child { color: var(--muted); font-size: 0.84rem; }
 
     /* ── keyboard shortcuts ── */
-    .shortcuts { display: grid; grid-template-columns: auto 1fr; gap: 6px 24px; align-items: baseline; }
-    kbd {
-      background: var(--surface);
+    .shortcuts-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 8px 28px;
+      align-items: center;
+      background: var(--code-bg);
       border: 1px solid var(--border);
-      border-bottom-width: 2px;
-      border-radius: 4px;
+      border-radius: 10px;
+      padding: 16px 20px;
+    }
+    kbd {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-bottom: 2px solid var(--border2);
+      border-radius: 5px;
       color: var(--text);
       display: inline-block;
       font-family: "SF Mono", monospace;
-      font-size: 0.78rem;
-      padding: 2px 7px;
+      font-size: 0.76rem;
+      padding: 2px 8px;
       white-space: nowrap;
     }
-    .shortcut-desc { color: var(--muted); font-size: 0.88rem; }
+    .shortcut-desc { color: var(--muted); font-size: 0.87rem; }
 
     /* ── callout ── */
     .callout {
-      background: var(--surface);
-      border: 1px solid var(--border);
+      background: rgba(227,169,70,0.06);
+      border: 1px solid rgba(227,169,70,0.25);
       border-left: 3px solid var(--yellow);
-      border-radius: 6px;
-      padding: 12px 16px;
+      border-radius: 8px;
+      padding: 14px 18px;
       font-size: 0.88rem;
-      color: var(--muted);
-      margin: 16px 0;
+      color: var(--text);
+      margin: 18px 0;
     }
     .callout strong { color: var(--yellow); }
 
+    .callout.blue {
+      background: rgba(91,164,245,0.06);
+      border-color: rgba(91,164,245,0.25);
+      border-left-color: var(--blue);
+    }
+    .callout.blue strong { color: var(--blue); }
+
     /* ── config yaml colors ── */
-    .yaml-key   { color: var(--blue); }
-    .yaml-val   { color: var(--green); }
-    .yaml-str   { color: #a5d6ff; }
+    .yaml-key     { color: var(--blue); }
+    .yaml-val     { color: var(--green); }
+    .yaml-str     { color: #7ec8e3; }
     .yaml-comment { color: var(--muted); font-style: italic; }
 
+    /* ── footer ── */
     footer {
       border-top: 1px solid var(--border);
       color: var(--muted);
       font-size: 0.82rem;
-      padding: 24px;
+      padding: 32px 24px;
       text-align: center;
+    }
+    .footer-links { display: flex; gap: 24px; justify-content: center; margin-bottom: 12px; flex-wrap: wrap; }
+    .footer-links a { color: var(--muted); transition: color 0.15s; }
+    .footer-links a:hover { color: var(--text); text-decoration: none; }
+    .footer-copy { color: var(--muted); opacity: 0.5; font-size: 0.78rem; }
+
+    /* ── back to top ── */
+    #back-top {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 1rem;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s, color 0.15s, border-color 0.15s, box-shadow 0.2s;
+      text-decoration: none;
+    }
+    #back-top.visible { opacity: 1; pointer-events: auto; }
+    #back-top:hover {
+      color: var(--blue);
+      border-color: var(--blue);
+      box-shadow: 0 0 14px var(--glow-blue);
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
 
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-brand"><span>lazy</span>-bastion</div>
+  <div class="nav-links">
+    <a href="#install">Instalación</a>
+    <a href="#config">Config</a>
+    <a href="#uso">Uso</a>
+    <a href="#logs">Logs</a>
+    <a href="https://github.com/mbaez-ctech/lazy-bastion" target="_blank">GitHub ↗</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
 <header>
-  <div class="logo"><span>lazy</span>-bastion &nbsp;<span style="color:var(--muted);font-size:1.4rem">·</span>&nbsp; <span style="font-size:1.8rem;color:var(--blue)">lzb</span></div>
+  <div class="logo">
+    <span class="accent">lazy</span>-bastion
+    <span class="sep"> · </span>
+    <span class="lzb">lzb</span>
+  </div>
   <p class="tagline">TUI para túneles AWS SSM y conexiones SSH a producción</p>
+
+  <div style="display:flex;justify-content:center;margin-top:24px">
+    <div class="hero-cmd" onclick="copyHero(this,'curl -fsSL https://mbaez-ctech.github.io/lazy-bastion/install.sh | bash')">
+      <span class="prompt">$</span>
+      <span>curl -fsSL …/install.sh | bash</span>
+      <span class="copy-icon">Copiar</span>
+    </div>
+  </div>
+
   <div class="badges">
     <span class="badge green">Go 1.22+</span>
     <span class="badge blue">macOS · Linux · Windows</span>
@@ -219,9 +476,12 @@
 
 <main>
 
-  <!-- ── INSTALACIÓN ─────────────────────────────────────────────────── -->
+  <!-- ── INSTALACIÓN ── -->
   <section id="install">
-    <h2>Instalación</h2>
+    <h2>
+      <span class="section-icon green">⬇</span>
+      Instalación
+    </h2>
 
     <div class="tabs">
       <button class="tab-btn active" onclick="switchTab(event,'mac')">macOS</button>
@@ -232,78 +492,115 @@
     <!-- macOS -->
     <div class="tab-panel active" id="tab-mac">
       <p>Pega esto en tu terminal (detecta automáticamente Intel o Apple Silicon):</p>
-      <pre><code>curl -fsSL https://mbaez-ctech.github.io/lazy-bastion/install.sh | bash</code><button class="copy-btn" onclick="copy(this)">Copiar</button></pre>
+      <div class="code-wrap">
+        <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <pre><code>curl -fsSL https://mbaez-ctech.github.io/lazy-bastion/install.sh | bash</code></pre>
+        <button class="copy-btn" onclick="copy(this)">Copiar</button>
+      </div>
 
-      <p>O para instalar una versión específica:</p>
-      <pre><code>LZB_VERSION=1.2.0 curl -fsSL https://mbaez-ctech.github.io/lazy-bastion/install.sh | bash</code><button class="copy-btn" onclick="copy(this)">Copiar</button></pre>
+      <p>Para instalar una versión específica:</p>
+      <div class="code-wrap">
+        <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <pre><code>LZB_VERSION=1.2.0 curl -fsSL https://mbaez-ctech.github.io/lazy-bastion/install.sh | bash</code></pre>
+        <button class="copy-btn" onclick="copy(this)">Copiar</button>
+      </div>
 
-      <p>Por defecto el binario queda en <code>/usr/local/bin/lzb</code>. Puedes cambiarlo:</p>
-      <pre><code>LZB_INSTALL_DIR=~/bin curl -fsSL https://mbaez-ctech.github.io/lazy-bastion/install.sh | bash</code><button class="copy-btn" onclick="copy(this)">Copiar</button></pre>
+      <p>Por defecto el binario queda en <code>/usr/local/bin/lzb</code>. Para cambiarlo:</p>
+      <div class="code-wrap">
+        <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <pre><code>LZB_INSTALL_DIR=~/bin curl -fsSL https://mbaez-ctech.github.io/lazy-bastion/install.sh | bash</code></pre>
+        <button class="copy-btn" onclick="copy(this)">Copiar</button>
+      </div>
 
       <h3>Prerequisitos macOS</h3>
-      <table>
-        <tr><th>Herramienta</th><th>Instalar</th><th>Notas</th></tr>
-        <tr><td>AWS CLI v2</td><td><a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html">aws.amazon.com</a></td><td>Requerido para SSO</td></tr>
-        <tr><td>Session Manager Plugin</td><td><a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html">aws.amazon.com</a></td><td>Túneles SSM</td></tr>
-        <tr><td>lsof</td><td>Incluido en macOS</td><td>Detección de puertos</td></tr>
-        <tr><td>ssh-keygen</td><td>Incluido en macOS</td><td>Generación de llaves</td></tr>
-      </table>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Herramienta</th><th>Instalar</th><th>Notas</th></tr>
+          <tr><td>AWS CLI v2</td><td><a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html">aws.amazon.com</a></td><td>Requerido para SSO</td></tr>
+          <tr><td>Session Manager Plugin</td><td><a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html">aws.amazon.com</a></td><td>Túneles SSM</td></tr>
+          <tr><td>lsof</td><td>Incluido en macOS</td><td>Detección de puertos</td></tr>
+          <tr><td>ssh-keygen</td><td>Incluido en macOS</td><td>Generación de llaves</td></tr>
+        </table>
+      </div>
     </div>
 
     <!-- Windows -->
     <div class="tab-panel" id="tab-win">
       <p>Abre <strong>PowerShell</strong> como usuario normal (no administrador) y ejecuta:</p>
-      <pre><code>iwr https://mbaez-ctech.github.io/lazy-bastion/install.ps1 | iex</code><button class="copy-btn" onclick="copy(this)">Copiar</button></pre>
+      <div class="code-wrap">
+        <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <pre><code>iwr https://mbaez-ctech.github.io/lazy-bastion/install.ps1 | iex</code></pre>
+        <button class="copy-btn" onclick="copy(this)">Copiar</button>
+      </div>
 
-      <p>El binario se instala en <code>%LOCALAPPDATA%\Programs\lzb\lzb.exe</code> y se agrega al PATH del usuario automáticamente.</p>
+      <p>El binario se instala en <code>%LOCALAPPDATA%\Programs\lzb\lzb.exe</code> y se agrega al PATH automáticamente.</p>
 
       <div class="callout">
         <strong>⚠ Política de ejecución</strong><br>
-        Si PowerShell bloquea el script, primero corre:<br>
+        Si PowerShell bloquea el script, primero corre:<br><br>
         <code>Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</code>
       </div>
 
       <p>Para una versión específica:</p>
-      <pre><code>$env:LZB_VERSION="1.2.0"; iwr https://mbaez-ctech.github.io/lazy-bastion/install.ps1 | iex</code><button class="copy-btn" onclick="copy(this)">Copiar</button></pre>
+      <div class="code-wrap">
+        <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <pre><code>$env:LZB_VERSION="1.2.0"; iwr https://mbaez-ctech.github.io/lazy-bastion/install.ps1 | iex</code></pre>
+        <button class="copy-btn" onclick="copy(this)">Copiar</button>
+      </div>
 
       <h3>Prerequisitos Windows</h3>
-      <table>
-        <tr><th>Herramienta</th><th>Instalar</th><th>Notas</th></tr>
-        <tr><td>AWS CLI v2</td><td><a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html">aws.amazon.com (MSI)</a></td><td>Requerido para SSO</td></tr>
-        <tr><td>Session Manager Plugin</td><td><a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html">aws.amazon.com (EXE)</a></td><td>Túneles SSM</td></tr>
-        <tr><td>OpenSSH</td><td>Configuración → Apps → Características opcionales</td><td>ssh-keygen</td></tr>
-        <tr><td>Windows Terminal</td><td><a href="https://aka.ms/terminal">Microsoft Store</a></td><td>Recomendado para la TUI</td></tr>
-      </table>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Herramienta</th><th>Instalar</th><th>Notas</th></tr>
+          <tr><td>AWS CLI v2</td><td><a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html">aws.amazon.com (MSI)</a></td><td>Requerido para SSO</td></tr>
+          <tr><td>Session Manager Plugin</td><td><a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html">aws.amazon.com (EXE)</a></td><td>Túneles SSM</td></tr>
+          <tr><td>OpenSSH</td><td>Configuración → Apps → Características opcionales</td><td>ssh-keygen</td></tr>
+          <tr><td>Windows Terminal</td><td><a href="https://aka.ms/terminal">Microsoft Store</a></td><td>Recomendado para la TUI</td></tr>
+        </table>
+      </div>
     </div>
 
     <!-- Manual -->
     <div class="tab-panel" id="tab-manual">
       <p>Descarga el binario directamente desde <a href="https://github.com/mbaez-ctech/lazy-bastion/releases">GitHub Releases</a>:</p>
 
-      <table style="margin-bottom:16px">
-        <tr><th>Plataforma</th><th>Archivo</th></tr>
-        <tr><td>macOS Apple Silicon</td><td><code>lzb-darwin-arm64</code></td></tr>
-        <tr><td>macOS Intel</td><td><code>lzb-darwin-amd64</code></td></tr>
-        <tr><td>Linux x86_64</td><td><code>lzb-linux-amd64</code></td></tr>
-        <tr><td>Windows x64</td><td><code>lzb-windows-amd64.exe</code></td></tr>
-      </table>
+      <div class="table-wrap" style="margin-bottom:20px">
+        <table>
+          <tr><th>Plataforma</th><th>Archivo</th></tr>
+          <tr><td>macOS Apple Silicon</td><td><code>lzb-darwin-arm64</code></td></tr>
+          <tr><td>macOS Intel</td><td><code>lzb-darwin-amd64</code></td></tr>
+          <tr><td>Linux x86_64</td><td><code>lzb-linux-amd64</code></td></tr>
+          <tr><td>Windows x64</td><td><code>lzb-windows-amd64.exe</code></td></tr>
+        </table>
+      </div>
 
-      <p>Luego hazlo ejecutable y muévelo al PATH:</p>
-      <pre><code># macOS / Linux
+      <p>Hazlo ejecutable y muévelo al PATH:</p>
+      <div class="code-wrap">
+        <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <pre><code># macOS / Linux
 chmod +x lzb-darwin-arm64
-sudo mv lzb-darwin-arm64 /usr/local/bin/lzb</code><button class="copy-btn" onclick="copy(this)">Copiar</button></pre>
+sudo mv lzb-darwin-arm64 /usr/local/bin/lzb</code></pre>
+        <button class="copy-btn" onclick="copy(this)">Copiar</button>
+      </div>
 
-      <p>Verificar la integridad con el archivo <code>checksums.txt</code> del release:</p>
-      <pre><code>sha256sum -c checksums.txt --ignore-missing</code><button class="copy-btn" onclick="copy(this)">Copiar</button></pre>
+      <p>Verificar integridad con el archivo <code>checksums.txt</code> del release:</p>
+      <div class="code-wrap">
+        <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <pre><code>sha256sum -c checksums.txt --ignore-missing</code></pre>
+        <button class="copy-btn" onclick="copy(this)">Copiar</button>
+      </div>
     </div>
   </section>
 
-  <!-- ── CONFIGURACIÓN ───────────────────────────────────────────────── -->
+  <!-- ── CONFIGURACIÓN ── -->
   <section id="config">
-    <h2>Configuración</h2>
+    <h2>
+      <span class="section-icon blue">⚙</span>
+      Configuración
+    </h2>
 
     <p><code>lzb</code> busca <code>config.yml</code> en este orden:</p>
-    <ol style="padding-left:20px;color:var(--muted);font-size:0.9rem;line-height:2">
+    <ol>
       <li>Variable de entorno <code>LZB_CONFIG</code></li>
       <li>Junto al binario</li>
       <li>Directorio actual</li>
@@ -311,7 +608,12 @@ sudo mv lzb-darwin-arm64 /usr/local/bin/lzb</code><button class="copy-btn" oncli
     </ol>
 
     <h3>config.yml de ejemplo</h3>
-    <pre><code><span class="yaml-key">aws</span>:
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span style="margin-left:8px;font-size:0.75rem;color:var(--muted);font-family:monospace">config.yml</span>
+      </div>
+      <pre><code><span class="yaml-key">aws</span>:
   <span class="yaml-key">region</span>: <span class="yaml-str">us-west-1</span>          <span class="yaml-comment"># región de los recursos</span>
   <span class="yaml-key">account_id</span>: <span class="yaml-str">"123456789012"</span> <span class="yaml-comment"># cuenta AWS (para auto-detectar el perfil SSO)</span>
   <span class="yaml-key">sso_start_url</span>: <span class="yaml-str">"https://d-xxxxxx.awsapps.com/start"</span>
@@ -333,36 +635,47 @@ sudo mv lzb-darwin-arm64 /usr/local/bin/lzb</code><button class="copy-btn" oncli
     <span class="yaml-key">instance_id</span>: <span class="yaml-str">"i-0abc123"</span>
     <span class="yaml-key">tunnel_port</span>: <span class="yaml-val">2202</span>        <span class="yaml-comment"># puerto local efímero para SSH</span>
     <span class="yaml-key">ssh_user</span>: <span class="yaml-str">ubuntu</span>
-    <span class="yaml-key">private_ip</span>: <span class="yaml-str">"172.31.5.49"</span></code><button class="copy-btn" onclick="copy(this)">Copiar</button></pre>
+    <span class="yaml-key">private_ip</span>: <span class="yaml-str">"172.31.5.49"</span></code></pre>
+      <button class="copy-btn" onclick="copy(this)">Copiar</button>
+    </div>
 
     <h3>Variables de entorno</h3>
-    <table>
-      <tr><th>Variable</th><th>Efecto</th></tr>
-      <tr><td>LZB_CONFIG</td><td>Ruta alternativa al config.yml</td></tr>
-      <tr><td>LZB_PROFILE</td><td>Fuerza un perfil AWS concreto</td></tr>
-    </table>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Variable</th><th>Efecto</th></tr>
+        <tr><td>LZB_CONFIG</td><td>Ruta alternativa al config.yml</td></tr>
+        <tr><td>LZB_PROFILE</td><td>Fuerza un perfil AWS concreto</td></tr>
+      </table>
+    </div>
   </section>
 
-  <!-- ── USO ─────────────────────────────────────────────────────────── -->
+  <!-- ── USO ── -->
   <section id="uso">
-    <h2>Uso</h2>
+    <h2>
+      <span class="section-icon yellow">▶</span>
+      Uso
+    </h2>
 
-    <pre><code>lzb</code><button class="copy-btn" onclick="copy(this)">Copiar</button></pre>
+    <div class="code-wrap">
+      <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+      <pre><code>lzb</code></pre>
+      <button class="copy-btn" onclick="copy(this)">Copiar</button>
+    </div>
 
     <p>Al arrancar, la herramienta:</p>
-    <ol style="padding-left:20px;color:var(--muted);font-size:0.9rem;line-height:2">
+    <ol>
       <li>Detecta el perfil AWS SSO que corresponde al <code>account_id</code> configurado.</li>
       <li>Valida la sesión SSO; si expiró, abre el navegador para hacer login.</li>
       <li>Lanza la TUI.</li>
     </ol>
 
-    <div class="callout">
+    <div class="callout blue">
       <strong>Permisos AWS requeridos:</strong>
       El usuario debe pertenecer al grupo SSO <code>Admin_Tech</code> o <code>BastionAccess</code>.
     </div>
 
     <h3>Atajos de teclado</h3>
-    <div class="shortcuts" style="max-width:480px">
+    <div class="shortcuts-grid" style="max-width:520px">
       <div><kbd>↑</kbd> / <kbd>k</kbd></div>     <div class="shortcut-desc">Mover cursor arriba</div>
       <div><kbd>↓</kbd> / <kbd>j</kbd></div>     <div class="shortcut-desc">Mover cursor abajo</div>
       <div><kbd>↵</kbd> / <kbd>Space</kbd></div> <div class="shortcut-desc">Túnel: toggle · Servidor: conectar SSH</div>
@@ -373,25 +686,35 @@ sudo mv lzb-darwin-arm64 /usr/local/bin/lzb</code><button class="copy-btn" oncli
     </div>
   </section>
 
-  <!-- ── LOGS ────────────────────────────────────────────────────────── -->
+  <!-- ── LOGS ── -->
   <section id="logs">
-    <h2>Logs</h2>
+    <h2>
+      <span class="section-icon cyan">≡</span>
+      Logs
+    </h2>
     <p>Cada túnel escribe su salida en:</p>
-    <pre><code>/tmp/lzb-&lt;puerto&gt;.log        # túneles TCP/HTTP
+    <div class="code-wrap">
+      <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+      <pre><code>/tmp/lzb-&lt;puerto&gt;.log        # túneles TCP/HTTP
 /tmp/lzb-ssh-&lt;nombre&gt;.log   # túneles SSH</code></pre>
+    </div>
   </section>
 
 </main>
 
 <footer>
-  <p>lazy-bastion ·
-    <a href="https://github.com/mbaez-ctech/lazy-bastion">GitHub</a> ·
-    <a href="https://github.com/mbaez-ctech/lazy-bastion/releases">Releases</a> ·
+  <div class="footer-links">
+    <a href="https://github.com/mbaez-ctech/lazy-bastion">GitHub</a>
+    <a href="https://github.com/mbaez-ctech/lazy-bastion/releases">Releases</a>
     <a href="https://github.com/mbaez-ctech/lazy-bastion/issues">Issues</a>
-  </p>
+  </div>
+  <div class="footer-copy">lazy-bastion · MIT License</div>
 </footer>
 
+<a href="#" id="back-top" title="Volver arriba">↑</a>
+
 <script>
+  /* download badge */
   (async () => {
     try {
       const res = await fetch('https://api.github.com/repos/mbaez-ctech/lazy-bastion/releases');
@@ -406,6 +729,7 @@ sudo mv lzb-darwin-arm64 /usr/local/bin/lzb</code><button class="copy-btn" oncli
     } catch (_) {}
   })();
 
+  /* tabs */
   function switchTab(e, id) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
@@ -413,14 +737,31 @@ sudo mv lzb-darwin-arm64 /usr/local/bin/lzb</code><button class="copy-btn" oncli
     document.getElementById('tab-' + id).classList.add('active');
   }
 
+  /* copy button on code blocks — fix: use previousElementSibling to skip text nodes */
   function copy(btn) {
-    const code = btn.previousSibling.textContent;
-    navigator.clipboard.writeText(code.trim()).then(() => {
+    const pre = btn.previousElementSibling;
+    const code = pre.querySelector('code') || pre;
+    navigator.clipboard.writeText(code.textContent.trim()).then(() => {
       btn.textContent = '✓ Copiado';
       btn.classList.add('copied');
       setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2000);
     });
   }
+
+  /* hero copy button */
+  function copyHero(el, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      const icon = el.querySelector('.copy-icon');
+      icon.textContent = '✓ Copiado';
+      setTimeout(() => { icon.textContent = 'Copiar'; }, 2000);
+    });
+  }
+
+  /* back to top */
+  const backTop = document.getElementById('back-top');
+  window.addEventListener('scroll', () => {
+    backTop.classList.toggle('visible', window.scrollY > 400);
+  });
 </script>
 
 </body>
